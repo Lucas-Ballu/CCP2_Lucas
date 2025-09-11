@@ -12,7 +12,7 @@ export class ApplicationsRepository {
     return row;
   }
 
-  async listMine(volunteerId) {
+  async myApplications(volunteerId) {
     const [rows] = await pool.query(
       `SELECT a.*, m.title FROM applications a 
        JOIN missions m ON m.id=a.mission_id

@@ -7,8 +7,8 @@ export class ApplicationsService {
     return repo.create(missionId, volunteerId, note);
   }
 
-  mine(volunteerId) {
-    return repo.listMine(volunteerId);
+  myApplications(volunteerId) {
+    return repo.myApplications(volunteerId);
   }
 
   forMission(missionId) {
