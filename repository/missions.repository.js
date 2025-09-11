@@ -1,4 +1,4 @@
-import { pool } from "../pool/pool";
+import { pool } from "../pool/pool.js";
 
 export class MissionRepository {
   async list() {
