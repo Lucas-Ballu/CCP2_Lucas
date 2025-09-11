@@ -1,5 +1,9 @@
 import jwt from "jsonwebtoken";
+import argon2 from "argon2";
 import { AuthService } from "../services/users.services.js";
+import { UserRepository } from "../repository/users.repository.js";
+
+const userRepo = new UserRepository();
 
 const authService = new AuthService();
 
