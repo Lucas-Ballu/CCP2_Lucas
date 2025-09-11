@@ -1,12 +1,11 @@
-import { MissionRepository } from "../repository/missions.repository";
+import { MissionRepository } from "../repository/missions.repository.js";
 const missionRepo = new MissionRepository();
 
 export class MissionService {
-  list() {
-    return missionRepo.list();
+  async create({ title, description, date, associationId }) {
+    return missionRepo.create(title, description, date, associationId);
   }
-
-  create(data, userId) {
-    return missionRepo.create(data.title, data.description, data.date, userId);
+  async list() {
+    return missionRepo.list();
   }
 }
