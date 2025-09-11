@@ -12,8 +12,8 @@ export class ApplicationsController {
     res.status(201).json(a);
   }
 
-  async mine(req, res) {
-    const rows = await service.mine(req.user.id);
+  async myApplications(req, res) {
+    const rows = await service.myApplications(req.user.id);
     res.json(rows);
   }
 
