@@ -25,7 +25,7 @@ appRouter.patch(
   "/applications/:id/status",
   auth,
   authorizeRole(["ASSOCIATION"]),
-  (req, res) => appCtrl.apply(req, res)
+  (req, res) => appCtrl.setStatus(req, res)
 );
 
 export default appRouter;
