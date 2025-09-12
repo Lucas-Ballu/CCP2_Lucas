@@ -21,8 +21,11 @@ appRouter.get("/missions/:id/applications", auth, (req, res) =>
   appCtrl.forMission(req, res)
 );
 
-appRouter.patch("/applications/:id/status", auth, (req, res) =>
-  appCtrl.setStatus(req, res)
+appRouter.patch(
+  "/applications/:id/status",
+  auth,
+  authorizeRole(["ASSOCIATION"]),
+  (req, res) => appCtrl.apply(req, res)
 );
 
 export default appRouter;
