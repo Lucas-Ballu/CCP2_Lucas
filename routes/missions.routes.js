@@ -15,4 +15,18 @@ missionRouter.post(
 
 missionRouter.get("/missions", (req, res) => missionCtrl.list(req, res));
 
+missionRouter.delete(
+  "/missions/:id",
+  auth,
+  authorizeRole(["ASSOCIATION"]),
+  (req, res) => missionCtrl.remove(req, res)
+);
+
+missionRouter.put(
+  "/missions/:id",
+  auth,
+  authorizeRole(["ASSOCIATION"]),
+  (req, res) => missionCtrl.update(req, res)
+);
+
 export default missionRouter;

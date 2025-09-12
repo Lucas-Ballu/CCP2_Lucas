@@ -8,4 +8,25 @@ export class MissionService {
   async list() {
     return missionRepo.list();
   }
+
+  async delete(missionId, requesterId) {
+    const m = await missionRepo.findById(missionId);
+    if (!m) return null;
+    if (m.association_id !== requesterId) return false;
+    await missionRepo.remove(missionId);
+    return true;
+  }
+
+  async update(missionId, requesterId, data) {
+    const m = await missionRepo.findById(missionId);
+    if (!m) return null;
+    if (Number(m.association_id) !== Number(requesterId)) return false;
+
+    return missionRepo.update(
+      missionId,
+      data.title,
+      data.description,
+      data.date
+    );
+  }
 }
