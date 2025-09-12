@@ -18,4 +18,23 @@ export class MissionRepository {
     ]);
     return m;
   }
+
+  async findById(id) {
+    const [[m]] = await pool.query("SELECT * FROM missions WHERE id=?", [id]);
+    return m || null;
+  }
+
+  async remove(id) {
+    const [r] = await pool.query("DELETE FROM missions WHERE id=?", [id]);
+    return r.affectedRows > 0;
+  }
+
+  async update(id, title, description, date) {
+    await pool.query(
+      "UPDATE missions SET title=?, description=?, date=? WHERE id=?",
+      [title, description, date, id]
+    );
+    const [[m]] = await pool.query("SELECT * FROM missions WHERE id=?", [id]);
+    return m;
+  }
 }

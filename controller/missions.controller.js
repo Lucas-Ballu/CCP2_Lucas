@@ -25,4 +25,31 @@ export class MissionController {
     const missions = await missionService.list();
     res.json(missions);
   }
+
+  async remove(req, res) {
+    try {
+      const missionId = Number(req.params.id);
+      if (!missionId) {
+        return res.status(400).json({ message: "Invalid id" });
+      }
+      await missionService.delete(missionId, req.user.id);
+      res.status(200).json({ message: "Mission supprimée" });
+    } catch (e) {
+      res.status(500).json({ message: "Server error" });
+    }
+  }
+
+  async update(req, res) {
+    try {
+      const missionId = Number(req.params.id);
+      if (!missionId) return res.status(400).json({ message: "Invalid id" });
+
+      await missionService.update(missionId, req.user.id, req.body);
+
+      res.status(200).json({ message: "Mission mise à jour" });
+    } catch (e) {
+      console.error(" Erreur update mission:", e);
+      res.status(500).json({ message: "Server error" });
+    }
+  }
 }
