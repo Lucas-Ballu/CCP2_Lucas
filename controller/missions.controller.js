@@ -1,64 +1,98 @@
 import { MissionService } from "../services/missions.services.js";
 import { ApplicationsService } from "../services/applications.services.js";
 
-const appsService = new ApplicationsService();
 const missionService = new MissionService();
+const appsService = new ApplicationsService();
 
 export class MissionController {
   async create(req, res) {
-    const { title, description, date } = req.body;
-    if (!title || !description || !date)
-      return res.status(400).json({ message: "Missing fields" });
+    try {
+      const { title, description, date } = req.body;
+      if (!title || !description || !date) {
+        return res.status(400).json({ message: "Champs manquants" });
+      }
 
-    const associationId = req.user?.id;
-    if (!associationId)
-      return res.status(401).json({ message: "Not authenticated" });
+      if (!req.user?.id) {
+        return res.status(401).json({ message: "Non authentifié" });
+      }
 
-    const mission = await missionService.create({
-      title,
-      description,
-      date,
-      associationId,
-    });
-    res.status(201).json(mission);
+      const mission = await missionService.create({
+        title,
+        description,
+        date,
+        associationId: req.user.id,
+      });
+      res.status(201).json(mission);
+    } catch (err) {
+      console.error("Erreur create mission:", err);
+      res.status(500).json({ message: "Erreur serveur" });
+    }
   }
 
   async list(_req, res) {
-    const missions = await missionService.list();
-    res.json(missions);
+    try {
+      const missions = await missionService.list();
+      res.json(missions);
+    } catch (err) {
+      console.error("Erreur list missions:", err);
+      res.status(500).json({ message: "Erreur serveur" });
+    }
   }
 
   async listForMissionPending(req, res) {
-    const missionId = req.params.id;
-    const apps = await appsService.listForMissionPending(missionId);
-    const onlyPending = apps.filter((a) => a.status === "PENDING");
-    res.json(onlyPending);
+    try {
+      const missionId = req.params.id;
+      const apps = await appsService.forMission(missionId);
+      if (!apps.length) {
+        return res.status(404).json({ message: "Aucune candidature trouvée" });
+      }
+      const onlyPending = apps.filter((a) => a.status === "PENDING");
+      res.json(onlyPending);
+    } catch (err) {
+      console.error("Erreur listForMissionPending:", err);
+      res.status(500).json({ message: "Erreur serveur" });
+    }
   }
 
   async remove(req, res) {
     try {
       const missionId = Number(req.params.id);
       if (!missionId) {
-        return res.status(400).json({ message: "Invalid id" });
+        return res.status(400).json({ message: "Id invalide" });
       }
-      await missionService.delete(missionId, req.user.id);
-      res.status(200).json({ message: "Mission supprimée" });
-    } catch (e) {
-      res.status(500).json({ message: "Server error" });
+
+      const ok = await missionService.delete(missionId, req.user.id);
+      if (!ok) {
+        return res.status(403).json({ message: "Non autorisé" });
+      }
+
+      res.json({ message: "Mission supprimée" });
+    } catch (err) {
+      console.error("Erreur remove mission:", err);
+      res.status(500).json({ message: "Erreur serveur" });
     }
   }
 
   async update(req, res) {
     try {
       const missionId = Number(req.params.id);
-      if (!missionId) return res.status(400).json({ message: "Invalid id" });
+      if (!missionId) {
+        return res.status(400).json({ message: "Id invalide" });
+      }
 
-      await missionService.update(missionId, req.user.id, req.body);
+      const updated = await missionService.update(
+        missionId,
+        req.user.id,
+        req.body
+      );
+      if (!updated) {
+        return res.status(403).json({ message: "Non autorisé" });
+      }
 
-      res.status(200).json({ message: "Mission mise à jour" });
-    } catch (e) {
-      console.error(" Erreur update mission:", e);
-      res.status(500).json({ message: "Server error" });
+      res.json({ message: "Mission mise à jour" });
+    } catch (err) {
+      console.error("Erreur update mission:", err);
+      res.status(500).json({ message: "Erreur serveur" });
     }
   }
 }
