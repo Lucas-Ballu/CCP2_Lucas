@@ -8,6 +8,17 @@ export class MissionRepository {
     return rows;
   }
 
+  async listForMissionPending(missionId) {
+    const [rows] = await pool.query(
+      `SELECT a.*, u.name AS volunteer_name
+       FROM applications a
+       JOIN users u ON u.id = a.volunteer_id
+       WHERE a.mission_id = ?`,
+      [missionId]
+    );
+    return rows;
+  }
+
   async create(title, desc, date, association_id) {
     const [r] = await pool.query(
       "INSERT INTO missions (title,description,date,association_id) VALUES (?,?,?,?)",

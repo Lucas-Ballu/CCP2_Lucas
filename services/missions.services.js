@@ -9,6 +9,10 @@ export class MissionService {
     return missionRepo.list();
   }
 
+  listForMissionPending(missionId) {
+    return missionRepo.listForMissionPending(missionId);
+  }
+
   async delete(missionId, requesterId) {
     const m = await missionRepo.findById(missionId);
     if (!m) return null;

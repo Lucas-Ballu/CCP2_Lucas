@@ -33,6 +33,17 @@ export class ApplicationsRepository {
     return rows;
   }
 
+  async listForMissionPending(missionId) {
+    const [rows] = await pool.query(
+      `SELECT a.*, u.name AS volunteer_name 
+       FROM applications a 
+       JOIN users u ON u.id=a.volunteer_id
+       WHERE a.mission_id=? AND a.status='PENDING'`,
+      [missionId]
+    );
+    return rows;
+  }
+
   async setStatus(id, status) {
     await pool.query("UPDATE applications SET status=? WHERE id=?", [
       status,

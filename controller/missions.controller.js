@@ -1,5 +1,7 @@
 import { MissionService } from "../services/missions.services.js";
+import { ApplicationsService } from "../services/applications.services.js";
 
+const appsService = new ApplicationsService();
 const missionService = new MissionService();
 
 export class MissionController {
@@ -24,6 +26,13 @@ export class MissionController {
   async list(_req, res) {
     const missions = await missionService.list();
     res.json(missions);
+  }
+
+  async listForMissionPending(req, res) {
+    const missionId = req.params.id;
+    const apps = await appsService.listForMissionPending(missionId);
+    const onlyPending = apps.filter((a) => a.status === "PENDING");
+    res.json(onlyPending);
   }
 
   async remove(req, res) {

@@ -29,4 +29,11 @@ missionRouter.put(
   (req, res) => missionCtrl.update(req, res)
 );
 
+missionRouter.get(
+  "/missions/:id/applications",
+  auth,
+  authorizeRole(["ASSOCIATION"]),
+  (req, res) => missionCtrl.listForMissionPending(req, res)
+);
+
 export default missionRouter;

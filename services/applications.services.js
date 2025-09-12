@@ -15,6 +15,10 @@ export class ApplicationsService {
     return repo.listForMission(missionId);
   }
 
+  listForMissionPending(missionId) {
+    return repo.listForMissionPending(missionId);
+  }
+
   setStatus(id, status) {
     return repo.setStatus(id, status);
   }
