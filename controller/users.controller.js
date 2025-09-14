@@ -91,7 +91,12 @@ export class AuthController {
    * @returns {void} 200 si déconnecté
    */
   logout(req, res) {
-    res.clearCookie("token");
-    res.json({ message: "Déconnecté" });
+    res.cookie("token", "", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+      expires: new Date(0),
+    });
+    res.json({ message: "Déconnexion réussie" });
   }
 }
