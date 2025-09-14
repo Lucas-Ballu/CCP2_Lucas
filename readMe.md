@@ -8,7 +8,7 @@ Application Node.js / Express pour gérer des **missions associatives** et les *
 
 ### Installation
 
-`````````bash
+``````````bash
 git clone https://github.com/Lucas-Ballu/CCP2_Lucas.git
 cd CCP2_Lucas
 npm install
@@ -22,6 +22,11 @@ DB_USER=<votre-utilisateur>
 DB_PASSWORD=<votre-motdepasse>
 DB_NAME=CCP2DB
 JWT_SECRET=dev
+
+`````````SQL vs NoSQL
+Facilité des relations
+Requêtes plus faciles pour les multi-tables
+Contraintes et validations (not null, enum, on delete cascade)
 
 ````SQL
 Créer la base de données
@@ -95,4 +100,4 @@ Roles utilisateurs
 
 VOLUNTEER : peut consulter les missions et postuler
 ASSOCIATION : peut créer/modifier/supprimer ses missions et gérer les candidatures reçues
-`````````
+``````````
